@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pandemic Simulator</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="modal.css">
+    <a href = "graph.html" target = "_blank"> </a>
+  </head>
+
+  <body>
+    <!-- Import D3 -->
+
+    <div class="full-container">
+      <div class="loading-screen">
+        <div class="loader"></div>
+      </div>
+      <div class="specifics" id="specifics" style="visibility: hidden">
+        <p class="province-info" id="province-info"></p>
+        <div class="form-field">
+          <p class="form-field-title"><b>Social Distancing</b></p>
+          <div class="form-field-options">
+            <input
+              type="number"
+              name="socialDistancing"
+              min="0"
+              max="1"
+              step="0.01"
+              id="socialDistancing"
+              value="0.5"
+            />
+
+            <br />
+          </div>
+        </div>
+        <!--end of the this form-field-->
+
+        <div class="form-field">
+          <p class="form-field-title"><b>Initial Cases</b></p>
+          <div class="form-field-options">
+            <input
+              type="number"
+              name="initialCases"
+              id="initialCases"
+              min="1"
+              max="10000"
+              value="30"
+            />
+
+            <br />
+
+            <br />
+          </div>
+        </div>
+        <!--end of the this form-field-->
+
+        <div class="form-field">
+          <p class="form-field-title"><b>Leaving Population</b></p>
+          <div class="form-field-options">
+            <input
+              type="number"
+              name="leavingPopulation"
+              min="0"
+              max="30000"
+              step="10"
+              id="leavingPopulation"
+              value="300"
+            />
+
+            <br />
+          </div>
+        </div>
+        <!--end of the this form-field-->
+
+        <div class="form-field">
+          <p class="form-field-title"><b>Incoming Population</b></p>
+          <div class="form-field-options">
+            <input
+              type="number"
+              name="incomingPopulation"
+              min="0"
+              max="30000"
+              step="10"
+              id="incomingPopulation"
+              value="300"
+            />
+
+            <br />
+          </div>
+        </div>
+        <!--end of the this form-field-->
+
+        
+        <div class="form-field">
+          <p class="form-field-title"><b>Bed Capacity</b></p>
+          <div class="form-field-options">
+            <input
+              type="number"
+              name="bedCapacity"
+              min="0"
+              max="10"
+              step="20"
+              id="bedCapacity"
+              value="10000"
+            />
+
+            <br />
+          </div>
+        </div>
+        <!--end of the this form-field-->
+      </div>
+      <!--END OF SPECIFICS-->
+
+      <div class="map-container" id="map-container">
+        <div id="map"></div>
+        <div class = "warning-message" id = "warning-message">
+          Please select an attribute for the heatmap to display.
+        </div>
+        <button
+          class="show-button"
+          onclick="showForm()"
+          id="show-form"
+        ></button>
+
+        <svg class = "svg"></svg>
+        <div class = "legend" id = "legend">
+
+          <div class = "legend-information">  
+
+            <div class = "legend-box"> </div>
+          <p class = "characteristic" id = "characteristic"> Untitled</p>
+          <p class = "max-percentage" id = "max-percentage"> Untitled</p>
+
+        </div>
+          <div class = "color-box" id = "color-box">
+
+            <div class = "box" style = "background-color: rgb(0,255,0)">   </div>
+            <div class = "box" style = "background-color: rgb(60,255,0)">   </div>
+            <div class = "box" style = "background-color: rgb(120,255,0)">   </div>
+            <div class = "box" style = "background-color: rgb(180,255,0)">   </div>
+            <div class = "box" style = "background-color: rgb(240,255,0)">   </div>
+            <div class = "box" style = "background-color: rgb(255,240,0)">   </div>
+            <div class = "box" style = "background-color: rgb(255,180,0)">   </div>
+            <div class = "box" style = "background-color: rgb(255,120,0)">   </div>
+            <div class = "box" style = "background-color: rgb(255,60,0)">   </div>
+          </div>
+
+          <div class = "percent-text" id = "percent-text">
+            <p class = "percent">below 10%</p>
+            <p class = "percent">10% ~ 20%</p>
+            <p class = "percent">20% ~ 30%</p>
+            <p class = "percent">30% ~ 40%</p>
+            <p class = "percent">40% ~ 50%</p>
+            <p class = "percent">50% ~ 60%</p>
+            <p class = "percent">60% ~ 70%</p>
+            <p class = "percent">70% ~ 80%</p>
+            <P class = "percent">above 80%</P>
+
+          </div>
+
+        </div>
+
+        <div class="specifics-container" id="specifics-container"></div>        
+        
+        <div class = "timecontrol-container" id = "timecontrol-container">
+          <button class = "timecontrol-button" id = "restart" onclick="restartButton()">Restart</button>
+          <button class="timecontrol-button" id="pauseControl" onclick="pauseControl()"><p id = "pause-control-text">Start</p>
+          <button class = "timecontrol-button" id = "step1daybackward" onclick="stepButton(1)">Forward</button>
+          <button class = "timecontrol-button" id = "step1dayforward" onclick="stepButton(-1)">Back</button>  
+        </div>
+        
+        <div class="pop-up" id="pop-up">          
+      
+
+          <select
+            class="diseaseAttribute"
+            id="diseaseAttribute"
+            name="diseaseAttribute"
+            autocomplete="off"
+          >
+            <option disabled selected value="" hidden  >Heatmap Attribute</option>
+            <option value="Death" >Death</option>
+            <option value="Exposed" >Exposed</option>
+            <option value="Infected Asymptomatic" >Infected Asymptomatic</option>
+            <option value="Infected Hospitalized" >Infected Hospitalized</option>
+            <option value="Infected Symptomatic" >Infected Symptomatic</option>
+            <option value="Recovered" >Recovered</option>
+            <option value="Susceptible" >Susceptible</option>
+          </select>
+          <button class="timecontrol-button" id="reset" onclick="location.reload()">Reset</button>
+        </div>
+        <!--END OF pop-up div -->
+
+  
+
+        <!--The tooltip is for when hovering over top of an certain area, it will display information-->
+        <svg class="tooltip" id = "tooltip"></svg>
+        <div class="days" id="day"></div>
+        <!-- <div class="instruction" id="instruction"></div> -->
+      </div>
+
+      <!--end of the map container-->
+
+      <div class="form-container" id="form-bound">
+        <!-- end of the info class div -->
+        <form id="submission-form" class="submission-form">
+          <p class="form-title" id="form-title">Pandemic Simulator</p>
+          <div class="simulator-info" id="simulator-info-dialog">
+            Hello, Welcome to the pandemic simulator, this program was designed
+            with the intention to help people see how changing different
+            environment factors, affects the spread of the disease. Although,
+            this may not be 100% accurate the process of picking variables and
+            running multiple simulations would give a person a good idea whether
+            or not the plan to tackle a disease is good or not.
+            <ol>
+              <li>Disease Name: Give a name to your disease </li>
+              <li>Incubation Periods: How long the disease incubate before the symptoms are shown.                             (Counted In Days)</li>
+              <li>Infective Period: How long it takes to for the the person is infectd.                                   (Counted In Days)</li>
+              <li>Transmission Rate: How many people the infected contact each days                                                  (In Person)</li>
+              <li>Chance Of Asymptomatic: Getting infected but the symptom is not showing.                                       (In Percentage)</li>
+              <li>Chance Of Hospitalization: Chance of getting hospitalized.                                                     (In Percentage)</li>
+              <li>Death Rate After Hospitalization: The mortality rate of the disease after getting hospitalized.                (In Percentage)</li>
+              <li>Mutation Period: Disease changes so people who recovered will become susceptible to the disease again.                                                                 (Counted in days)</li>
+              <li>Simulation Period: How long the simulation will last, the simulation will stop once it reaches the last day. (Counted In Days)</li>
+              <li>Provide Social Distancing Measures: take social distancing measure when it's necessary</li>
+            </ol>
+          </div>
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Disease Name</b></p>
+            <div class="form-field-options">
+              <input type="text" id="disease" size="4" value="Epidemic" />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Incubation Period (days)</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="incubationPeriod"
+                min="1"
+                max="100"
+                id="incubationPeriod"
+                value="3"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Infective Period (days)</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="infectivePeriod"
+                min="1"
+                max="100"
+                id="infectivePeriod"
+                value="5"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Transmission Rate</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="transmissionRate"
+                min="0"
+                max="100"
+                id="transmissionRate"
+                value="10"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Chance Of Asymptomatic</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="chanceOfAsymptomatic"
+                min="0"
+                max="1"
+                step="0.01"
+                id="chanceofAsymptomatic"
+                value="0.2"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Chance Of Hospitalization</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="chanceOfHospitalization"
+                min="0"
+                max="1"
+                step="0.01"
+                id="chanceofHospitalization"
+                value="0.1"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title">
+              <b>Death Rate After Hospitalization</b>
+            </p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="deathRateAfterHospitalization"
+                min="0"
+                max="1"
+                step="0.01"
+                id="deathRateAfterHospitalization"
+                value="0.1"
+              />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Mutation Period (days)</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="mutationPeriod"
+                id="mutationPeriod"
+                min="0"
+                max="300"
+                value="120"
+              />
+
+              <br />
+
+              <br />
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <!--end of the this form-field-->
+
+          <div class="form-field">
+            <p class="form-field-title"><b>Simulation Period</b></p>
+            <div class="form-field-options">
+              <input
+                type="number"
+                name="simulationPeriod"
+                min="0"
+                max="1000"
+                id="simulationPeriod"
+                value="50"
+              />
+
+              <br />
+            </div>
+          </div>
+          <div class = "form-field">
+            <p class="form-field-title"><b>Provide Social Distancing Measures</b></p>
+            <div class="form-field-options" id="form-field ">
+              <div>
+              <input type="radio" name="provideSocialDistancing" id="yes" value = "1">
+              <label for="yes">Yes</label>
+            </div>
+              <div>
+              <input type="radio" name="provideSocialDistancing" id="no" value = "0" checked>
+              <label for="no">No</label>
+              </div>
+            </div>
+          </div>
+          <!--end of the this form-field-->
+
+          <!--This should close the fourm to allow for the editng and selection of initial province data-->
+          
+          <!--<button class="button" type="provedit" onclick="hideForm()" value="ProvinceData">Edit Province Data</button>-->
+
+          <button class="submit-button" type="submit" value="Submit">Submit</button>
+          
+        </form>
+        <button type="button" onclick="hideForm()" id="hide-form"><img src="close.png" alt="close" class="hide-form-image" /></button>
+      </div>
+      <!-- </div> -->
+    </div>
+
+    <script src="buttonHandler.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+
+    <!-- Custom JS -->
+    <!-- <a href="homePage.html" class="home-page-link">Return to home page</a> -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--GOOGLE MAP API SOURCE + KEY-->
+
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMhDkmKpPIkWicHuZh3H9CUdD3EFGJ4zQ&libraries=visualization&callback=initMap"
+    ></script>
+
+    <!--Magic Scroll source for split screen scrolling APIfsdf-->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js"
+      integrity="sha512-8E3KZoPoZCD+1dgfqhPbejQBnQfBXe8FuwL4z/c8sTrgeDMFEnoyTlH3obB4/fV+6Sg0a0XF+L/6xS4Xx1fUEg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </body>
+  <script src="report.js"></script>
+  <script src="main.js"></script>
+  <script src="function.js"></script>
+</html>

@@ -1,0 +1,87 @@
+{
+  "provinces": [
+    [
+      {
+        "province": "Alberta",
+        "abbr": "AB",
+        "population": 4262635,
+        "connectedProv": ["BC, NT, SK"]
+      },
+      {
+        "province": "Newfoundland and Labrador",
+        "abbr": "NL",
+        "population": 510550,
+        "connectedProv": ["QC"]
+      },
+      {
+        "province": "British Columbia",
+        "abbr": "BC",
+        "population": 5000879,
+        "connectedProv": ["AB, NT, YT"]
+      },
+      {
+        "province": "Prince Edward Island",
+        "abbr": "PE",
+        "population": 154331,
+        "connectedProv": ["AB, NT, YT"]
+      },
+      {
+        "province": "Manitoba",
+        "abbr": "MB",
+        "population": 1342153,
+        "connectedProv": ["SK, ON, NU"]
+      },
+      {
+        "province": "Nova Scotia",
+        "abbr": "NS",
+        "population": 969383,
+        "connectedProv": ["NB"]
+      },
+      {
+        "province": "New Brunswick",
+        "abbr": "NB",
+        "population": 775610,
+        "connectedProv": ["NS, QC"]
+      },
+      {
+        "province": "Quebec",
+        "abbr": "QC",
+        "population": 8501833,
+        "connectedProv": ["NB, NL"]
+      },
+      {
+        "province": "Northwest Territories",
+        "abbr": "NT",
+
+        "population": 41070,
+        "connectedProv": ["BC, AB, SK, YT, NV"]
+      },
+      {
+        "province": "Ontario",
+        "abbr": "ON",
+
+        "population": 14223942,
+        "connectedProv": ["QC, MB"]
+      },
+      {
+        "province": "Nunavut",
+        "abbr": "NU",
+
+        "population": 36858,
+        "connectedProv": ["MB, NT"]
+      },
+      {
+        "province": "Saskatchewan",
+        "abbr": "SK",
+        "population": 1132505,
+        "connectedProv": ["MB, AB"]
+      },
+      {
+        "province": "Yukon",
+        "abbr": "YT",
+        "population": 40232,
+        "connectedProv": ["NT, BC"]
+      }
+    ]
+  ]
+}
