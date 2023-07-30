@@ -59,7 +59,5 @@ please use the command "node-v" in cmd to verify that it is installed.
    ![](step8a.png)
    ![](liveserver.png)
    ![](step8b.png)
-10. Enjoy the project\
-    ![](step9.png)
 
 YOU CAN CONTACT US IF YOU RUN INTO ANY PROBLEMS
